@@ -12,12 +12,53 @@ export interface NewsArticle {
   tags: string[];
 }
 
+export interface NewsArticleManaged extends NewsArticle {
+  authorId: string;
+  published: boolean;
+}
+
+// ─── Tipos de Usuário ──────────────────────────────────────────────────────
+
+export type UserRole = 'leitor' | 'autor' | 'editor' | 'superadmin';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+}
+
+// ─── Comentários ───────────────────────────────────────────────────────────
+
+export interface Comment {
+  id: string;
+  articleId: string;
+  articleTitle: string;
+  userId: string;
+  content: string;
+  createdAt: string;
+}
+
 // ─── Tipos de Navegação ────────────────────────────────────────────────────
 
 export type RootStackParamList = {
-  Login: undefined;
   Home: undefined;
+  Login: undefined;
   NewsDetail: { article: NewsArticle };
+  // Leitor
+  LeitorProfile: undefined;
+  Comment: { articleId: string; articleTitle: string };
+  // Autor
+  AutorProfile: undefined;
+  MinhasNoticias: undefined;
+  NovaNoticia: undefined;
+  EditarNoticia: { article: NewsArticleManaged };
+  // Editor
+  EditorPainel: undefined;
+  EditorProfile: undefined;
+  EditarQualquerNoticia: { article: NewsArticleManaged };
+  // Super Admin
+  SuperAdminDashboard: undefined;
 };
 
 // ─── Tipos de Autenticação ─────────────────────────────────────────────────

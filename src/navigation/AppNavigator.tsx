@@ -1,23 +1,66 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text, Alert } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 
-import { RootStackParamList } from '../types';
-import LoginScreen from '../screens/LoginScreen';
+import { RootStackParamList, UserRole } from '../types';
+import { useUser } from '../context/UserContext';
+
+// Telas Públicas
 import HomeScreen from '../screens/HomeScreen';
+import LoginScreen from '../screens/LoginScreen';
 import NewsDetailScreen from '../screens/NewsDetailScreen';
-import { clearAuthState } from '../services/storageService';
+
+// Leitor
+import LeitorProfileScreen from '../screens/leitor/LeitorProfileScreen';
+import CommentScreen from '../screens/leitor/CommentScreen';
+
+// Autor
+import AutorProfileScreen from '../screens/autor/AutorProfileScreen';
+import MinhasNoticiasScreen from '../screens/autor/MinhasNoticiasScreen';
+import NovaNoticiaScreen from '../screens/autor/NovaNoticiaScreen';
+import EditarNoticiaScreen from '../screens/autor/EditarNoticiaScreen';
+
+// Editor
+import EditorPainelScreen from '../screens/editor/EditorPainelScreen';
+import EditorProfileScreen from '../screens/editor/EditorProfileScreen';
+import EditarQualquerNoticiaScreen from '../screens/editor/EditarQualquerNoticiaScreen';
+
+// Super Admin
+import SuperAdminDashboardScreen from '../screens/superadmin/SuperAdminDashboardScreen';
 
 // ─── Stack Navigator ───────────────────────────────────────────────────────
 
 const Stack = createStackNavigator<RootStackParamList>();
+
+// ─── Botão de Perfil no Header ─────────────────────────────────────────────
+
+const PROFILE_ROUTES: Record<UserRole, keyof RootStackParamList> = {
+  leitor: 'LeitorProfile',
+  autor: 'AutorProfile',
+  editor: 'EditorProfile',
+  superadmin: 'SuperAdminDashboard',
+};
+
+const ProfileHeaderButton: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const { currentUser } = useUser();
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.navigate(PROFILE_ROUTES[currentUser.role])}
+      style={{ marginRight: 16 }}
+    >
+      <Text style={{ fontSize: 14, color: '#e53935', fontWeight: '600' }}>
+        Meu Perfil
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 // ─── Componente ────────────────────────────────────────────────────────────
 
 const AppNavigator: React.FC = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Login"
+      initialRouteName="Home"
       screenOptions={{
         headerStyle: {
           backgroundColor: '#ffffff',
@@ -29,59 +72,108 @@ const AppNavigator: React.FC = () => {
           fontWeight: '700',
           fontSize: 18,
         },
-        cardStyle: { backgroundColor: '#f0f4ff' },
+        cardStyle: { backgroundColor: '#fff5f5' },
       }}
     >
-      {/* Tela de Login */}
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-
-      {/* Tela Home */}
+      {/* ── Telas Públicas ──────────────────────────────────────────────── */}
       <Stack.Screen
         name="Home"
         component={HomeScreen}
         options={({ navigation }) => ({
-          title: '📰 NewsApp',
-          headerLeft: () => null, // Remove botão de voltar
-          gestureEnabled: false,  // Impede swipe para voltar ao login
+          title: 'Notícias',
+          headerLeft: () => null,
+          gestureEnabled: false,
+          headerRight: () => <ProfileHeaderButton navigation={navigation} />,
+        })}
+      />
+
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ title: 'Login' }}
+      />
+
+      <Stack.Screen
+        name="NewsDetail"
+        component={NewsDetailScreen}
+        options={{ title: 'Notícia', headerBackTitle: 'Voltar' }}
+      />
+
+      {/* ── Leitor ──────────────────────────────────────────────────────── */}
+      <Stack.Screen
+        name="LeitorProfile"
+        component={LeitorProfileScreen}
+        options={{ title: 'Meu Perfil', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="Comment"
+        component={CommentScreen}
+        options={{ title: 'Comentar', headerBackTitle: 'Voltar' }}
+      />
+
+      {/* ── Autor ───────────────────────────────────────────────────────── */}
+      <Stack.Screen
+        name="AutorProfile"
+        component={AutorProfileScreen}
+        options={{ title: 'Meu Perfil', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="MinhasNoticias"
+        component={MinhasNoticiasScreen}
+        options={({ navigation }) => ({
+          title: 'Minhas Notícias',
+          headerBackTitle: 'Voltar',
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => {
-                Alert.alert('Sair', 'Deseja realmente sair?', [
-                  { text: 'Cancelar', style: 'cancel' },
-                  {
-                    text: 'Sair',
-                    style: 'destructive',
-                    onPress: async () => {
-                      await clearAuthState();
-                      navigation.replace('Login');
-                    },
-                  },
-                ]);
-              }}
+              onPress={() => navigation.navigate('NovaNoticia')}
               style={{ marginRight: 16 }}
             >
-              <Text
-                style={{ fontSize: 14, color: '#1a73e8', fontWeight: '600' }}
-              >
-                Sair
+              <Text style={{ fontSize: 24, color: '#e53935', fontWeight: '300' }}>
+                +
               </Text>
             </TouchableOpacity>
           ),
         })}
       />
 
-      {/* Tela de Detalhes da Notícia */}
       <Stack.Screen
-        name="NewsDetail"
-        component={NewsDetailScreen}
-        options={() => ({
-          title: 'Notícia',
-          headerBackTitle: 'Voltar',
-        })}
+        name="NovaNoticia"
+        component={NovaNoticiaScreen}
+        options={{ title: 'Nova Notícia', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="EditarNoticia"
+        component={EditarNoticiaScreen}
+        options={{ title: 'Editar Notícia', headerBackTitle: 'Voltar' }}
+      />
+
+      {/* ── Editor ──────────────────────────────────────────────────────── */}
+      <Stack.Screen
+        name="EditorPainel"
+        component={EditorPainelScreen}
+        options={{ title: 'Painel do Editor', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="EditorProfile"
+        component={EditorProfileScreen}
+        options={{ title: 'Meu Perfil', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="EditarQualquerNoticia"
+        component={EditarQualquerNoticiaScreen}
+        options={{ title: 'Editar Notícia', headerBackTitle: 'Voltar' }}
+      />
+
+      {/* ── Super Admin ─────────────────────────────────────────────────── */}
+      <Stack.Screen
+        name="SuperAdminDashboard"
+        component={SuperAdminDashboardScreen}
+        options={{ title: 'Dashboard', headerBackTitle: 'Voltar' }}
       />
     </Stack.Navigator>
   );

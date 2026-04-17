@@ -10,7 +10,6 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NewsArticle, RootStackParamList } from '../types';
 import { fetchNews } from '../services/newsService';
-import { clearAuthState } from '../services/storageService';
 import NewsCard from '../components/NewsCard';
 import SearchBar from '../components/SearchBar';
 import UFPicker from '../components/UFPicker';
@@ -94,20 +93,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     navigation.navigate('NewsDetail', { article });
   };
 
-  const handleLogout = () => {
-    Alert.alert('Sair', 'Deseja realmente sair?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Sair',
-        style: 'destructive',
-        onPress: async () => {
-          await clearAuthState();
-          navigation.replace('Login');
-        },
-      },
-    ]);
-  };
-
   // ── Render ─────────────────────────────────────────────────────────────────
 
   const renderHeader = () => (
@@ -183,8 +168,8 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            colors={['#1a73e8']}
-            tintColor="#1a73e8"
+            colors={['#e53935']}
+            tintColor="#e53935"
           />
         }
         showsVerticalScrollIndicator={false}
@@ -198,7 +183,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f4ff',
+    backgroundColor: '#fff5f5',
   },
   listContent: {
     paddingBottom: 24,
@@ -213,12 +198,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginVertical: 8,
     padding: 10,
-    backgroundColor: '#e8f0fe',
+    backgroundColor: '#fce4ec',
     borderRadius: 8,
   },
   activeFiltersText: {
     fontSize: 13,
-    color: '#1a73e8',
+    color: '#e53935',
     flex: 1,
   },
   clearFiltersText: {

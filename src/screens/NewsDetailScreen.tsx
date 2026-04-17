@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
@@ -50,7 +51,7 @@ function formatFullDate(dateStr: string): string {
 
 // ─── Componente ────────────────────────────────────────────────────────────
 
-const NewsDetailScreen: React.FC<Props> = ({ route }) => {
+const NewsDetailScreen: React.FC<Props> = ({ navigation, route }) => {
   const { article } = route.params;
 
   return (
@@ -112,6 +113,19 @@ const NewsDetailScreen: React.FC<Props> = ({ route }) => {
             </View>
           </View>
         )}
+
+        {/* Botão Comentar */}
+        <TouchableOpacity
+          style={styles.commentButton}
+          onPress={() =>
+            navigation.navigate('Comment', {
+              articleId: article.id,
+              articleTitle: article.title,
+            })
+          }
+        >
+          <Text style={styles.commentButtonText}>Comentar</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -122,7 +136,7 @@ const NewsDetailScreen: React.FC<Props> = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f4ff',
+    backgroundColor: '#fff5f5',
   },
   content: {
     paddingBottom: 40,
@@ -149,13 +163,13 @@ const styles = StyleSheet.create({
   },
   source: {
     fontSize: 13,
-    color: '#1a73e8',
+    color: '#e53935',
     fontWeight: '600',
     flex: 1,
     marginRight: 8,
   },
   ufBadge: {
-    backgroundColor: '#1a73e8',
+    backgroundColor: '#e53935',
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -217,15 +231,27 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   tag: {
-    backgroundColor: '#e8f0fe',
+    backgroundColor: '#fce4ec',
     borderRadius: 20,
     paddingVertical: 4,
     paddingHorizontal: 12,
   },
   tagText: {
     fontSize: 12,
-    color: '#1a73e8',
+    color: '#e53935',
     fontWeight: '500',
+  },
+  commentButton: {
+    marginTop: 24,
+    backgroundColor: '#e53935',
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  commentButtonText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '700',
   },
 });
 

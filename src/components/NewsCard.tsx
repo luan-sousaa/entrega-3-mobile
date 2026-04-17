@@ -115,13 +115,13 @@ const styles = StyleSheet.create({
   },
   source: {
     fontSize: 12,
-    color: '#1a73e8',
+    color: '#e53935',
     fontWeight: '600',
     flex: 1,
     marginRight: 8,
   },
   ufBadge: {
-    backgroundColor: '#1a73e8',
+    backgroundColor: '#e53935',
     borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
