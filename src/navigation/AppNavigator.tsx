@@ -10,6 +10,12 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import NewsDetailScreen from '../screens/NewsDetailScreen';
 
+// Login por perfil
+import LoginLeitorScreen from '../screens/login/LoginLeitorScreen';
+import LoginAutorScreen from '../screens/login/LoginAutorScreen';
+import LoginEditorScreen from '../screens/login/LoginEditorScreen';
+import LoginSuperAdminScreen from '../screens/login/LoginSuperAdminScreen';
+
 // Leitor
 import LeitorProfileScreen from '../screens/leitor/LeitorProfileScreen';
 import CommentScreen from '../screens/leitor/CommentScreen';
@@ -90,7 +96,31 @@ const AppNavigator: React.FC = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ title: 'Login' }}
+        options={{ title: 'Entrar', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="LoginLeitor"
+        component={LoginLeitorScreen}
+        options={{ title: 'Login — Leitor', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="LoginAutor"
+        component={LoginAutorScreen}
+        options={{ title: 'Login — Autor', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="LoginEditor"
+        component={LoginEditorScreen}
+        options={{ title: 'Login — Editor', headerBackTitle: 'Voltar' }}
+      />
+
+      <Stack.Screen
+        name="LoginSuperAdmin"
+        component={LoginSuperAdminScreen}
+        options={{ title: 'Login — Super Admin', headerBackTitle: 'Voltar' }}
       />
 
       <Stack.Screen

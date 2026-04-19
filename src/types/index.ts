@@ -44,6 +44,10 @@ export interface Comment {
 export type RootStackParamList = {
   Home: undefined;
   Login: undefined;
+  LoginLeitor: undefined;
+  LoginAutor: undefined;
+  LoginEditor: undefined;
+  LoginSuperAdmin: undefined;
   NewsDetail: { article: NewsArticle };
   // Leitor
   LeitorProfile: undefined;
