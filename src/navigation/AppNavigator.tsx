@@ -87,7 +87,6 @@ const AppNavigator: React.FC = () => {
         component={HomeScreen}
         options={({ navigation }) => ({
           title: 'Notícias',
-          headerLeft: () => null,
           gestureEnabled: false,
           headerRight: () => <ProfileHeaderButton navigation={navigation} />,
         })}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import {
   View,
   FlatList,
@@ -15,6 +15,7 @@ import SearchBar from '../components/SearchBar';
 import UFPicker from '../components/UFPicker';
 import LoadingIndicator from '../components/LoadingIndicator';
 import EmptyState from '../components/EmptyState';
+import LoginDrawer from '../components/LoginDrawer';
 
 // ─── Tipos ──────────────────────────────────────────────────────────────────
 
@@ -31,11 +32,26 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Filtros
   const [searchQuery, setSearchQuery] = useState('');
   const [pendingQuery, setPendingQuery] = useState('');
   const [selectedUF, setSelectedUF] = useState('TODOS');
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => setDrawerOpen(true)}
+          style={{ marginLeft: 16, padding: 4 }}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <Text style={{ fontSize: 22, color: '#1a1a2e' }}>☰</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   // ── Busca de Notícias ─────────────────────────────────────────────────────
 
@@ -149,6 +165,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <LoginDrawer visible={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <FlatList
         data={articles}
         keyExtractor={(item) => item.id}
